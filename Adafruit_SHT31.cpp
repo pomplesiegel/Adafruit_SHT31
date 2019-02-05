@@ -22,11 +22,9 @@ Adafruit_SHT31::Adafruit_SHT31() {
 }
 
 boolean Adafruit_SHT31::begin(uint8_t i2caddr) {
-  Wire.begin();
+  // Wire.begin();
   _i2caddr = i2caddr;
-  reset();
-  // return (readStatus() == 0x40);
-  return true;
+  return reset();
 }
 
 uint16_t Adafruit_SHT31::readStatus(void) {
@@ -39,9 +37,10 @@ uint16_t Adafruit_SHT31::readStatus(void) {
   return stat;
 }
 
-void Adafruit_SHT31::reset(void) {
-  writeCommand(SHT31_SOFTRESET);
+bool Adafruit_SHT31::reset(void) {
+  bool successfulCommand = writeCommand(SHT31_SOFTRESET);
   delay(10);
+  return successfulCommand; 
 }
 
 void Adafruit_SHT31::heater(boolean h) {
@@ -111,11 +110,11 @@ boolean Adafruit_SHT31::readTempHum(void) {
   return true;
 }
 
-void Adafruit_SHT31::writeCommand(uint16_t cmd) {
+bool Adafruit_SHT31::writeCommand(uint16_t cmd) {
   Wire.beginTransmission(_i2caddr);
   Wire.write(cmd >> 8);
   Wire.write(cmd & 0xFF);
-  Wire.endTransmission();
+  return Wire.endTransmission() == 0; //Transmission is a success if endTransmission returns 0
 }
 
 uint8_t Adafruit_SHT31::crc8(const uint8_t *data, int len) {

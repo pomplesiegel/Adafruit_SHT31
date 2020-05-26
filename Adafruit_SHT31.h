@@ -75,7 +75,7 @@ class Adafruit_SHT31 {
         /**
          * Performs a reset of the sensor to put it into a known state.
          */
-        bool reset(void);
+        void reset(void);
 
         /**
          * Enables or disabled the heating element.
@@ -122,7 +122,7 @@ class Adafruit_SHT31 {
          *
          * @param cmd   The 16-bit command ID to send.
          */
-        bool     writeCommand(uint16_t cmd);
+        void     writeCommand(uint16_t cmd);
 
         /**
          * Internal function to read data over the I2C bus.
